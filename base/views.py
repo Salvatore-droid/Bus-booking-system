@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Bus, Route, Schedule, Booking, Payment
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 
 # View to list all buses
 
@@ -12,55 +14,38 @@ def home(request):
 
 
 def login_view(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            messages.success(request, 'Login successful')
-            return redirect('home')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"Welcome back, {username}!")
+                return redirect('home')  # Replace 'home' with your desired redirect URL
+            else:
+                messages.error(request, "Invalid username or password.")
         else:
-            messages.error(request, 'Invalid username or password')
-            return redirect('login_view')
-
-    return render(request, 'login.html')
-
-
-def register(request):
-    if request.method == "POST":
-        email = request.POST.get("email")
-        username = request.POST.get("username")
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
-
-        if not email:
-            messages.error(request, "email is required.")
-            return redirect("register")
-        
-        if not username:
-            messages.error(request, "username  is required.")
-            return redirect("register")
+            messages.error(request, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
 
-        if password1 != password2:
-            messages.error(request, "Passwords do not match.")
-            return redirect("register")
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Student with that registration number already exists, continue to login.")
-            return redirect("register")
-
-        user = User.objects.create_user(username=username, email=email, password=password1)
-        user.save()
-
-        Voter.objects.create(user=user)
-        
-        messages.success(request, "Account created successfully. Please log in.")
-        return redirect("login_view")
-
-    return render(request, "register.html")
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log the user in after registration
+            messages.success(request, f"Account created successfully! Welcome, {user.username}.")
+            return redirect('login_view')  # Replace 'home' with your desired redirect URL
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
 
 def bus_list(request):
     buses = Bus.objects.all()
