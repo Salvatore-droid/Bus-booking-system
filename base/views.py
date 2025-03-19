@@ -23,7 +23,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, f"Welcome back, {username}!")
-            return redirect('home')  # Replace 'home' with your desired redirect URL
+            return redirect('/')  # Replace 'home' with your desired redirect URL
         else:
             messages.error(request, "Invalid username or password.")
     return render(request, 'login.html')
@@ -50,7 +50,7 @@ def register_view(request):
         user = User.objects.create_user(username=username, email=email, password=password1)
         login(request, user)  # Log the user in after registration
         messages.success(request, f"Account created successfully! Welcome, {username}.")
-        return redirect('home')  # Replace 'home' with your desired redirect URL
+        return redirect('login_view')  # Replace 'home' with your desired redirect URL
     
     return render(request, 'register.html')
 
