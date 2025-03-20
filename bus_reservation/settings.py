@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -142,11 +143,11 @@ MEDIA_URL = '/images/'
 JAZZMIN_SETTINGS = {
     "changeform_format": "carousel",
     "site_title": "My Admin Panel",
-    "site_header": "Bus Reservation Admin Panel",
-    # "site_logo": "images/klk.png",
+    # "site_header": "Bus Reservation Admin Panel",
+    "site_logo": "images/bus.webp",
     "site_brand": "Bus Booking System",
-    "welcome_sign": "Welcome to KLK Admin.",
-    "login_logo": "images/klk.png",
+    "welcome_sign": "Welcome to Booking Admin.",
+    "login_logo": "images/bus.jpg",
     "copyright": "Bus Booking System",
     "show_ui_builder": True,
 }
