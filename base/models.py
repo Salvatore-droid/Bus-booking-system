@@ -8,19 +8,16 @@ class Bus(models.Model):
     bus_number = models.CharField(max_length=20, unique=True)
     total_seats = models.PositiveIntegerField(default=40)
     amenities = models.TextField(blank=True, null=True)  # e.g., WiFi, AC, Charging Ports
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to='buses/', default='bus.jpg' , blank=True)
 
 
     def __str__(self):
         return f"{self.bus_name} ({self.bus_number})"
 
-    @property
-    def imageURL(self):
-        try:
-            url = self.image.url
-        except:
-            url = ''
-        return url
+    class Meta:
+        verbose_name_plural = 'Buses'
+
+    
 
 
 # Route Model

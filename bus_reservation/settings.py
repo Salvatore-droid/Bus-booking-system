@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u)#6@08aq-uhplw=69%kuabxif4-74e5axnjcdum(k)o#m=b=h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'base'
+    'base.apps.BaseConfig'
 ]
 
 MIDDLEWARE = [
@@ -123,10 +123,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'staticfiles',
+    BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / 'static'
+# STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'base/static/images')
 
@@ -136,7 +136,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'base/static/images')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-MEDIA_URL = '/images/'
+
+LOGIN_URL = 'login_view'
+
+MEDIA_URL = 'images/'
 
 
 

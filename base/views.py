@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 # View to list all buses
 
 def home(request):
-    return render(request, 'index.html')
+    return render(request, 'base/index.html')
 
 
 def login_view(request):
@@ -26,7 +26,7 @@ def login_view(request):
             return redirect('/')  # Replace 'home' with your desired redirect URL
         else:
             messages.error(request, "Invalid username or password.")
-    return render(request, 'login.html')
+    return render(request, 'base/login.html')
 
 
 def register_view(request):
@@ -52,11 +52,11 @@ def register_view(request):
         messages.success(request, f"Account created successfully! Welcome, {username}.")
         return redirect('login_view')  # Replace 'home' with your desired redirect URL
     
-    return render(request, 'register.html')
+    return render(request, 'base/register.html')
 
 def bus_list(request):
     buses = Bus.objects.all()
-    return render(request, 'bus_list.html', {'buses': buses})
+    return render(request, 'base/bus_list.html', {'buses': buses})
 
 
 # View to show details of a specific bus
@@ -75,7 +75,7 @@ def bus_detail(request, pk):
         window_seats.append(i + 1)  # Left window seat
         window_seats.append(i + 4)  # Right window seat
     
-    return render(request, 'bus_detail.html', {
+    return render(request, 'base/bus_detail.html', {
         'bus': bus,
         'seat_range': seat_range,
         'booked_seats': booked_seats,
@@ -94,7 +94,7 @@ def schedule_list(request):
         route__destination__iexact=destination,
         departure_time__date=date
     )
-    return render(request, 'schedule_list.html', {'schedules': schedules})
+    return render(request, 'base/schedule_list.html', {'schedules': schedules})
 
 
 # View to book a bus
@@ -118,7 +118,7 @@ def booking_create(request, bus_id, seat_number):
         messages.success(request, 'Booking successful!')
         return redirect('booking_list')
 
-    return render(request, 'booking_create.html', {
+    return render(request, 'base/booking_create.html', {
         'bus': bus,
         'seat_number': seat_number,
         'schedule': schedule,
@@ -128,7 +128,7 @@ def booking_create(request, bus_id, seat_number):
 @login_required(login_url='login_view')
 def booking_list(request):
     bookings = Booking.objects.filter(user=request.user)
-    return render(request, 'booking_list.html', {'bookings': bookings})
+    return render(request, 'base/booking_list.html', {'bookings': bookings})
 
 
 # View to cancel a booking
@@ -149,7 +149,7 @@ def booking_delete(request, pk):
         return redirect('booking_list')
 
     # If it's a GET request, show the confirmation page
-    return render(request, 'booking_confirm_delete.html', {'booking': booking})
+    return render(request, 'base/booking_confirm_delete.html', {'booking': booking})
 
 
 def logout_view(request):
